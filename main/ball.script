@@ -1,0 +1,36 @@
+x = true
+y = false
+speed = 5
+
+function out_of_bounds(self)
+	if go.get_position().x > 1200 then
+		x = false
+	elseif go.get_position().x < 0 then
+		x = true
+	end
+	
+	if go.get_position().y > 720 then
+		y = false
+	elseif go.get_position().y < 0 then
+		y = true
+	end
+end
+
+function move(self)
+	if x  then
+		go.set_position(go.get_position() + vmath.vector3(speed,0, 0))
+	else 
+		go.set_position(go.get_position() + vmath.vector3(-speed,0, 0))
+	end
+	
+	if y  then
+		go.set_position(go.get_position() + vmath.vector3(0,speed, 0))
+	else 
+		go.set_position(go.get_position() + vmath.vector3(0,-speed, 0))
+	end
+	out_of_bounds(self)
+end
+
+function update(self, dt)
+    move(self)
+end

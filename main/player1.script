@@ -1,0 +1,24 @@
+function init(self)
+    print("init player1 script ")
+  msg.post(".","acquire_input_focus") --important
+
+end
+
+
+function update(self, dt)
+    	--print("update ")
+
+end
+
+
+
+function on_input(self, action_id, action)
+	print("input ", action_id)
+    if action_id == hash("up") then 
+		go.set_position(go.get_position() + vmath.vector3(0,10, 0))
+		return true -- input handled.
+    elseif action_id == hash("down") then
+		go.set_position(go.get_position() + vmath.vector3(0,-10, 0))
+		return true -- input handled.
+    end
+end
