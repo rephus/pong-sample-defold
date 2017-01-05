@@ -13,7 +13,9 @@ end
 
 
 function on_input(self, action_id, action)
-	print("input ", action_id)
+	--print("input ", action_id)
+	--print("Collision position ", go.get_position("#collisionobject1"), go.get_position()	 )
+	
     if action_id == hash("up") then 
 		go.set_position(go.get_position() + vmath.vector3(0,10, 0))
 		return true -- input handled.

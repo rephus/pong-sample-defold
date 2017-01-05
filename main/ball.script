@@ -1,36 +1,77 @@
-x = true
-y = false
-speed = 5
+
+x = false -- if true: move right , if false: move left
+y = false -- if true: move down, if false: move up
+speed = 500
+
+player1_score = 0
+player2_score = 0
+
+--- orig_position
+
+screen_width = 1280
+screen_height = 720
+
+function init(self)
+print (" Screen size ", screen_width, screen_height)
+	orig_position = go.get_position()	
+end
 
 function out_of_bounds(self)
-	if go.get_position().x > 1200 then
-		x = false
+	if go.get_position().x > screen_width then
+		go.set_position(orig_position)
+		player1_score = player1_score + 1
+		label.set_text("/score1#score1_label", player1_score)
+		x = not x
+		
 	elseif go.get_position().x < 0 then
-		x = true
+		go.set_position(orig_position)
+		player2_score = player2_score + 1
+		label.set_text("/score2#score2_label", player2_score)
+		x = not x
 	end
 	
-	if go.get_position().y > 720 then
+	if go.get_position().y > screen_height then
 		y = false
 	elseif go.get_position().y < 0 then
 		y = true
 	end
 end
 
-function move(self)
+function on_message(self, message_id, message, sender)
+    if message_id == hash("contact_point_response") then
+    	-- avoid collision on y 
+        if message.group == hash("default") and message.normal.y == 0 then
+        	-- change direction on contact with paddles
+        	print("Collision with ", message.normal, message.distance)
+        	-- resolving kinematic collision position 
+        	-- http://www.defold.com/manuals/physics/#_resolving_kinematic_collisions
+        	local newpos = go.get_position() + message.normal * message.distance
+        	go.set_position(newpos)
+        	
+        	x = not x
+        end
+    end
+end
+
+function move(self, dt)
+
+	position = vmath.vector3(0,0, 0)
 	if x  then
-		go.set_position(go.get_position() + vmath.vector3(speed,0, 0))
+		position.x = speed
 	else 
-		go.set_position(go.get_position() + vmath.vector3(-speed,0, 0))
+		position.x = -speed
 	end
 	
 	if y  then
-		go.set_position(go.get_position() + vmath.vector3(0,speed, 0))
+		position.y = speed
 	else 
-		go.set_position(go.get_position() + vmath.vector3(0,-speed, 0))
+		position.y = -speed
 	end
-	out_of_bounds(self)
+	go.set_position(go.get_position() + position * dt)
+	
 end
 
 function update(self, dt)
-    move(self)
+    move(self, dt)
+	out_of_bounds(self)    
 end

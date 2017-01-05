@@ -14,7 +14,11 @@ height = 720
 
 [physics]
 scale = 0.02
+debug = 1
 
 [script]
 shared_state = 1
+
+[tracking]
+app_id = 28D9745CC8764BDC
 

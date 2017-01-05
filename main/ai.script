@@ -1,0 +1,13 @@
+local speed = 100
+local initial_position = 0
+
+function init(self)
+	initial_position = go.get_position() 
+end 
+function update(self, dt)
+    ball_position = go.get_position("/ball")
+    my_position = go.get_position()
+    my_position.y = ball_position.y
+    
+    go.set_position(my_position)
+end
